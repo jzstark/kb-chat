@@ -24,6 +24,7 @@ Important variables:
 - `KB_SERVICE_TOKEN`: service token sent by `kb-mcp` as both `Authorization: Bearer ...` and `X-KB-Service-Token`.
 - `LIBRECHAT_DOMAIN_CLIENT` / `LIBRECHAT_DOMAIN_SERVER`: public LibreChat URL.
 - `CLAUDE_API_KEY` / `OPENAI_API_KEY`: model provider keys.
+- `ALLOW_REGISTRATION`: set to `true` only while creating the first account, then set it back to `false`.
 
 `KB_SERVICE_TOKEN` is prepared in this repo, but KnowledgeBase-S must also be
 updated to validate it before this becomes an enforced authentication boundary.
@@ -38,6 +39,32 @@ Detached:
 
 ```bash
 make dev-d
+```
+
+## First Account
+
+Temporarily enable registration:
+
+```env
+ALLOW_REGISTRATION=true
+```
+
+Apply the change:
+
+```bash
+make deploy
+```
+
+Create your account in the web UI, then disable registration again:
+
+```env
+ALLOW_REGISTRATION=false
+```
+
+Apply the change again:
+
+```bash
+make deploy
 ```
 
 ## VPS Deploy

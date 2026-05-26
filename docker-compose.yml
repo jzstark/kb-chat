@@ -44,7 +44,7 @@ services:
       CREDS_IV: ${LIBRECHAT_CREDS_IV}
       DOMAIN_CLIENT: ${LIBRECHAT_DOMAIN_CLIENT:-https://chat.laughtale.co.uk}
       DOMAIN_SERVER: ${LIBRECHAT_DOMAIN_SERVER:-https://chat.laughtale.co.uk}
-      ALLOW_REGISTRATION: "false"
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-false}
       ALLOW_EMAIL_LOGIN: "true"
       ALLOW_SOCIAL_LOGIN: "false"
       ANTHROPIC_API_KEY: ${CLAUDE_API_KEY}
