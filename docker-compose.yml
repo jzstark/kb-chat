@@ -27,6 +27,17 @@ services:
     expose:
       - "7878"
 
+  search-mcp:
+    image: ghcr.io/${GITHUB_OWNER:-owner}/kb-chat-search-mcp:latest
+    build:
+      context: ./services/search-mcp
+    restart: unless-stopped
+    environment:
+      BRAVE_SEARCH_API_KEY: ${BRAVE_SEARCH_API_KEY:-}
+      PORT: 7879
+    expose:
+      - "7879"
+
   librechat:
     image: ghcr.io/danny-avila/librechat:latest
     restart: unless-stopped
@@ -59,6 +70,7 @@ services:
       - mongodb
       - meilisearch
       - kb-mcp
+      - search-mcp
 
   nginx:
     image: nginx:alpine

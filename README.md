@@ -3,7 +3,8 @@
 Standalone LibreChat deployment for KnowledgeBase-S.
 
 This repo runs LibreChat, MongoDB, Meilisearch, nginx, and a small `kb-mcp`
-bridge that exposes KnowledgeBase-S API calls to LibreChat through MCP.
+bridge that exposes KnowledgeBase-S API calls to LibreChat through MCP. It also
+runs `search-mcp`, a Brave Search MCP bridge for current web/news search.
 
 ## Services
 
@@ -11,6 +12,7 @@ bridge that exposes KnowledgeBase-S API calls to LibreChat through MCP.
 - `mongodb`: LibreChat application state.
 - `meilisearch`: LibreChat search backend.
 - `kb-mcp`: MCP bridge to the remote KnowledgeBase-S API.
+- `search-mcp`: MCP bridge to Brave Search API.
 - `nginx`: HTTP entrypoint for `chat.laughtale.co.uk`.
 - `watchtower`: optional image auto-updater.
 
@@ -24,13 +26,17 @@ Important variables:
 - `KB_SERVICE_TOKEN`: service token sent by `kb-mcp` as both `Authorization: Bearer ...` and `X-KB-Service-Token`.
 - `LIBRECHAT_DOMAIN_CLIENT` / `LIBRECHAT_DOMAIN_SERVER`: public LibreChat URL.
 - `CLAUDE_API_KEY` / `OPENAI_API_KEY`: model provider keys.
+- `BRAVE_SEARCH_API_KEY`: Brave Search API key used by `search-mcp`.
 - `ALLOW_REGISTRATION`: set to `true` only while creating the first account, then set it back to `false`.
 
 New chats default to the `Claude Sonnet 4.6` model spec, configured in
 `config/librechat.yaml`.
 
-`KB_SERVICE_TOKEN` is prepared in this repo, but KnowledgeBase-S must also be
-updated to validate it before this becomes an enforced authentication boundary.
+`KB_SERVICE_TOKEN` must match the value configured in the KnowledgeBase-S `.env`.
+
+The `web-search` MCP exposes Brave LLM Context, Web Search, News Search, and a
+basic URL fetcher. Use Brave LLM Context for grounded current-information
+answers; use News Search when the user specifically asks for recent news.
 
 ## Local Run
 
@@ -75,6 +81,7 @@ make deploy
 On every push to `main`, GitHub Actions builds:
 
 - `ghcr.io/<owner>/kb-chat-kb-mcp:latest`
+- `ghcr.io/<owner>/kb-chat-search-mcp:latest`
 
 ```bash
 make deploy

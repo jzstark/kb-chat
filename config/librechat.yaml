@@ -27,12 +27,19 @@ mcpSettings:
   allowedDomains:
     - kb-mcp
     - http://kb-mcp:7878
+    - search-mcp
+    - http://search-mcp:7879
     - localhost
 
 mcpServers:
   knowledgebase:
     type: sse
     url: http://kb-mcp:7878/sse
+    timeout: 30000
+
+  web-search:
+    type: sse
+    url: http://search-mcp:7879/sse
     timeout: 30000
 
 # Model names and provider keys are configured through docker-compose.yml:
