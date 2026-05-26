@@ -1,0 +1,24 @@
+version: 1.2.1
+cache: true
+
+interface:
+  privacyPolicy:
+    externalUrl: ''
+  termsOfService:
+    externalUrl: ''
+
+mcpSettings:
+  allowedDomains:
+    - kb-mcp
+    - http://kb-mcp:7878
+    - localhost
+
+mcpServers:
+  knowledgebase:
+    type: sse
+    url: http://kb-mcp:7878/sse
+    timeout: 30000
+
+# Model names and provider keys are configured through docker-compose.yml:
+#   ANTHROPIC_API_KEY, ANTHROPIC_MODELS
+#   OPENAI_API_KEY, OPENAI_MODELS
