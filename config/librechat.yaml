@@ -2,10 +2,26 @@ version: 1.2.1
 cache: true
 
 interface:
+  modelSelect: true
+  parameters: true
+  presets: true
   privacyPolicy:
     externalUrl: ''
   termsOfService:
     externalUrl: ''
+
+modelSpecs:
+  addedEndpoints:
+    - anthropic
+    - openAI
+  list:
+    - name: claude-sonnet-4-6-default
+      label: Claude Sonnet 4.6
+      description: Default Claude model for new chats.
+      default: true
+      preset:
+        endpoint: anthropic
+        model: claude-sonnet-4-6
 
 mcpSettings:
   allowedDomains:

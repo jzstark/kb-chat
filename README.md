@@ -26,6 +26,9 @@ Important variables:
 - `CLAUDE_API_KEY` / `OPENAI_API_KEY`: model provider keys.
 - `ALLOW_REGISTRATION`: set to `true` only while creating the first account, then set it back to `false`.
 
+New chats default to the `Claude Sonnet 4.6` model spec, configured in
+`config/librechat.yaml`.
+
 `KB_SERVICE_TOKEN` is prepared in this repo, but KnowledgeBase-S must also be
 updated to validate it before this becomes an enforced authentication boundary.
 
