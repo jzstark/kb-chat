@@ -64,6 +64,7 @@ services:
       OPENAI_MODELS: gpt-4o,gpt-4o-mini
     volumes:
       - ./config/librechat.yaml:/app/librechat.yaml:ro
+      - ./config/assets/logo.svg:/app/client/public/assets/logo.svg:ro
       - ./data/librechat/images:/app/client/public/images
       - ./data/librechat/logs:/app/api/logs
     depends_on:
