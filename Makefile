@@ -1,4 +1,4 @@
-.PHONY: dev dev-d deploy down logs ps config
+.PHONY: dev dev-d deploy down build logs ps config
 
 COMPOSE=docker compose
 
@@ -12,7 +12,10 @@ deploy:
 	./deploy.sh
 
 down:
-	$(COMPOSE) down
+	$(COMPOSE) down --remove-orphans
+
+build:
+	$(COMPOSE) build kb-mcp search-mcp
 
 logs:
 	$(COMPOSE) logs -f --tail=200
