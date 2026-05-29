@@ -65,6 +65,11 @@ services:
     volumes:
       - ./config/librechat.yaml:/app/librechat.yaml:ro
       - ./config/assets/logo.svg:/app/client/public/assets/logo.svg:ro
+      - ./config/assets/logo.svg:/app/client/dist/assets/logo.svg:ro
+      - ./config/assets/favicon-16x16.png:/app/client/public/assets/favicon-16x16.png:ro
+      - ./config/assets/favicon-16x16.png:/app/client/dist/assets/favicon-16x16.png:ro
+      - ./config/assets/favicon-32x32.png:/app/client/public/assets/favicon-32x32.png:ro
+      - ./config/assets/favicon-32x32.png:/app/client/dist/assets/favicon-32x32.png:ro
       - ./data/librechat/images:/app/client/public/images
       - ./data/librechat/logs:/app/api/logs
     depends_on:
