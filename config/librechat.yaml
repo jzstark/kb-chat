@@ -5,6 +5,11 @@ interface:
   modelSelect: true
   parameters: true
   presets: true
+  agents:
+    use: true
+    create: true
+    share: false
+    public: false
   privacyPolicy:
     externalUrl: ''
   termsOfService:
@@ -14,6 +19,7 @@ modelSpecs:
   addedEndpoints:
     - anthropic
     - openAI
+    - agents
   list:
     - name: claude-sonnet-4-6-default
       label: Claude Sonnet 4.6
