@@ -58,6 +58,7 @@ services:
       ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-false}
       ALLOW_EMAIL_LOGIN: "true"
       ALLOW_SOCIAL_LOGIN: "false"
+      ENDPOINTS: openAI,anthropic,agents
       ANTHROPIC_API_KEY: ${CLAUDE_API_KEY}
       ANTHROPIC_MODELS: claude-opus-4-7,claude-sonnet-4-6,claude-haiku-4-5-20251001
       OPENAI_API_KEY: ${OPENAI_API_KEY}
