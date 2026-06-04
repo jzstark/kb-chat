@@ -39,6 +39,21 @@ def _add_optional(params: dict[str, Any], **values: Any) -> dict[str, Any]:
     return params
 
 
+# Brave rejects bare "zh"; map common aliases to BCP-47 subtags it accepts.
+_LANG_ALIASES: dict[str, str] = {
+    "zh": "zh-hans",
+    "zh-cn": "zh-hans",
+    "zh-sg": "zh-hans",
+    "zh-tw": "zh-hant",
+    "zh-hk": "zh-hant",
+    "zh-mo": "zh-hant",
+}
+
+
+def _normalize_lang(code: str) -> str:
+    return _LANG_ALIASES.get(code.lower(), code)
+
+
 async def _brave_get(path: str, params: dict[str, Any]) -> dict[str, Any]:
     async with httpx.AsyncClient(base_url=BRAVE_API_BASE, headers=_headers(), timeout=45.0) as client:
         response = await client.get(path, params=params)
@@ -110,7 +125,9 @@ async def brave_llm_context_search(
             day, 'pw' for past week, 'pm' for past month, 'py' for past year,
             or a Brave-supported custom date range.
         country: Optional 2-letter country code, for example 'US'.
-        search_lang: Search language, default 'en'.
+        search_lang: BCP-47 language code, default 'en'. Use 'zh-hans' for
+            Simplified Chinese, 'zh-hant' for Traditional Chinese. Bare 'zh'
+            is automatically normalised to 'zh-hans'.
         count: Search results Brave should consider, 1-50.
         maximum_number_of_urls: Max URLs included in context, 1-50.
         maximum_number_of_tokens: Approximate total context token budget,
@@ -121,7 +138,7 @@ async def brave_llm_context_search(
     params = _add_optional(
         {
             "q": query,
-            "search_lang": search_lang,
+            "search_lang": _normalize_lang(search_lang),
             "count": _bounded(count, 1, 50),
             "maximum_number_of_urls": _bounded(maximum_number_of_urls, 1, 50),
             "maximum_number_of_tokens": _bounded(maximum_number_of_tokens, 1024, 32768),
@@ -158,7 +175,7 @@ async def brave_web_search(
     params = _add_optional(
         {
             "q": effective_query,
-            "search_lang": search_lang,
+            "search_lang": _normalize_lang(search_lang),
             "count": _bounded(count, 1, 20),
             "extra_snippets": "true",
         },
@@ -185,7 +202,7 @@ async def brave_news_search(
     params = _add_optional(
         {
             "q": query,
-            "search_lang": search_lang,
+            "search_lang": _normalize_lang(search_lang),
             "count": _bounded(count, 1, 50),
         },
         freshness=freshness,
