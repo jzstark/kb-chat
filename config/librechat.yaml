@@ -31,16 +31,20 @@ modelSpecs:
 
 mcpSettings:
   allowedDomains:
-    - kb-mcp
-    - http://kb-mcp:7878
+    - swanny.laughtale.co.uk
+    - https://swanny.laughtale.co.uk
     - search-mcp
     - http://search-mcp:7879
     - localhost
 
 mcpServers:
   knowledgebase:
-    type: sse
-    url: http://kb-mcp:7878/sse
+    # kb-mcp moved into the KnowledgeBase-S stack; reach it over its public URL
+    # with the shared inbound token (MCP_STATIC_TOKEN from the environment).
+    type: streamable-http
+    url: https://swanny.laughtale.co.uk/mcp
+    headers:
+      X-MCP-Token: "${MCP_STATIC_TOKEN}"
     timeout: 30000
 
   web-search:

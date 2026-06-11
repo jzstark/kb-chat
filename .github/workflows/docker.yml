@@ -19,11 +19,6 @@ jobs:
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Build and push kb-mcp
-        run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/kb-chat-kb-mcp:latest ./services/kb-mcp
-          docker push ghcr.io/${{ github.repository_owner }}/kb-chat-kb-mcp:latest
-
       - name: Build and push search-mcp
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/kb-chat-search-mcp:latest ./services/search-mcp
