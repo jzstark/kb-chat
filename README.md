@@ -29,8 +29,9 @@ Important variables:
 - `BRAVE_SEARCH_API_KEY`: Brave Search API key used by `search-mcp`.
 - `ALLOW_REGISTRATION`: set to `true` only while creating the first account, then set it back to `false`.
 
-New chats default to the `Claude Sonnet 4.6` model spec, configured in
-`config/librechat.yaml`.
+The model picker includes `Claude Sonnet 5`, `Claude Sonnet 4.6`, and
+`Claude Opus 4.7`. New chats continue to default to the `Claude Sonnet 4.6`
+model spec, configured in `config/librechat.yaml`.
 
 `KB_SERVICE_TOKEN` must match the value configured in the KnowledgeBase-S `.env`.
 

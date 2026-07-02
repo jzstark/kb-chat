@@ -21,6 +21,12 @@ modelSpecs:
     - openAI
     - agents
   list:
+    - name: claude-sonnet-5
+      label: Claude Sonnet 5
+      description: Latest Sonnet model for coding, tool use, and complex knowledge work.
+      preset:
+        endpoint: anthropic
+        model: claude-sonnet-5
     - name: claude-sonnet-4-6-default
       label: Claude Sonnet 4.6
       description: Default Claude model for new chats.
