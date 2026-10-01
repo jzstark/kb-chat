@@ -30,7 +30,7 @@ services:
       - "7879"
 
   librechat:
-    image: ghcr.io/danny-avila/librechat:latest
+    image: ghcr.io/librechat-ai/librechat:latest
     restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=false"

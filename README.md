@@ -95,6 +95,66 @@ docker compose pull
 docker compose up -d --remove-orphans
 ```
 
+## Upgrade LibreChat from v0.8.7 to v0.8.8
+
+This repository uses `ghcr.io/librechat-ai/librechat:latest`, which pointed to
+v0.8.8 on 2026-10-01. The image moved from the `danny-avila` package namespace.
+Once these repository changes are available on the VPS, run the commands below
+from its repo directory.
+The server's existing `.env` values, especially `LIBRECHAT_CREDS_KEY`,
+`LIBRECHAT_CREDS_IV`, and the JWT secrets, must stay the same.
+
+First download the new image while the current site is still running:
+
+```bash
+git pull --ff-only
+docker compose pull librechat
+```
+
+Stop LibreChat writers and back up the database and mounted files. MongoDB
+stays running for the backup and migration. Keep this backup outside the repo.
+
+```bash
+docker compose stop librechat
+umask 077
+backup_dir="../kb-chat-backups/$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$backup_dir"
+docker compose exec -T mongodb mongodump --db LibreChat --archive > "$backup_dir/mongo.archive"
+tar -czf "$backup_dir/files.tgz" .env config data/librechat/images
+```
+
+Confirm both backup commands succeeded and the archive files are nonempty
+before continuing. Stop if any command fails.
+
+LibreChat v0.8.8 needs an explicit MongoDB tenant-index migration for
+databases created by v0.8.7 or earlier, including single-tenant installs.
+Check the dry-run output, then apply it while LibreChat remains stopped:
+
+```bash
+docker compose run --rm --no-deps -w /app librechat npm run migrate:tenant-indexes:dry-run
+docker compose run --rm --no-deps -w /app librechat npm run migrate:tenant-indexes
+docker compose up -d --no-deps librechat
+docker compose ps
+docker compose logs --tail=100 librechat
+```
+
+Check that the site loads, sign in, open an old conversation, send a new
+message, and try the KnowledgeBase and web-search MCP tools. If startup reports
+an index error, leave LibreChat stopped and follow the
+[tenant-index migration guide](https://www.librechat.ai/docs/configuration/mongodb/tenant_index_migration)
+before retrying. Do not drop MongoDB indexes or volumes to clear the error.
+
+For later releases, `make deploy` pulls the current `latest` image without a
+version edit. Check LibreChat's release and configuration notes first: a future
+release may require another migration or a `config/librechat.yaml` update.
+The LibreChat service is excluded from Watchtower updates, so `latest` does
+not change the running site until you deploy it.
+
+For rollback, stop LibreChat, restore the saved MongoDB archive and files,
+then run the previous `ghcr.io/danny-avila/librechat:v0.8.7` image and the
+previous `config/librechat.yaml`. Keep the backup until the upgraded site has
+been checked.
+
 ## Data
 
 Persistent runtime data is stored under:
