@@ -31,6 +31,8 @@ modelSpecs:
 
 mcpSettings:
   allowedDomains:
+    # The KnowledgeBase-S MCP (https://swanny.laughtale.co.uk/mcp) is added via the
+    # LibreChat UI and stored in MongoDB, not defined below; keep it allowed here.
     - swanny.laughtale.co.uk
     - https://swanny.laughtale.co.uk
     - search-mcp
@@ -38,15 +40,6 @@ mcpSettings:
     - localhost
 
 mcpServers:
-  knowledgebase:
-    # kb-mcp moved into the KnowledgeBase-S stack; reach it over its public URL
-    # with the shared inbound token (MCP_STATIC_TOKEN from the environment).
-    type: streamable-http
-    url: https://swanny.laughtale.co.uk/mcp
-    headers:
-      X-MCP-Token: "${MCP_STATIC_TOKEN}"
-    timeout: 30000
-
   web-search:
     type: streamable-http
     url: http://search-mcp:7879/mcp

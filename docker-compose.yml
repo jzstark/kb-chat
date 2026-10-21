@@ -16,7 +16,7 @@ services:
       - ./data/meili:/meili_data
 
   # kb-mcp now lives in the KnowledgeBase-S stack and is reached over its public
-  # URL (https://swanny.laughtale.co.uk/mcp). See config/librechat.yaml.
+  # URL (https://swanny.laughtale.co.uk/mcp), registered in the LibreChat UI.
 
   search-mcp:
     image: ghcr.io/${GITHUB_OWNER:-owner}/kb-chat-search-mcp:latest
@@ -54,7 +54,6 @@ services:
       ANTHROPIC_MODELS: claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5-20251001
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_MODELS: gpt-4o,gpt-4o-mini
-      MCP_STATIC_TOKEN: ${MCP_STATIC_TOKEN:-}
     volumes:
       - ./config/librechat.yaml:/app/librechat.yaml:ro
       - ./config/assets/logo.svg:/app/client/public/assets/logo.svg:ro
