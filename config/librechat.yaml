@@ -48,8 +48,8 @@ mcpServers:
     timeout: 30000
 
   web-search:
-    type: sse
-    url: http://search-mcp:7879/sse
+    type: streamable-http
+    url: http://search-mcp:7879/mcp
     timeout: 30000
 
 # Model names and provider keys are configured through docker-compose.yml:

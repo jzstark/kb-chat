@@ -4,24 +4,18 @@ from typing import Any
 
 import httpx
 from bs4 import BeautifulSoup
-from mcp.server.fastmcp import FastMCP
-
-try:
-    from mcp.server.transport_security import TransportSecuritySettings
-
-    _security = TransportSecuritySettings(enable_dns_rebinding_protection=False)
-except ImportError:
-    _security = None
+from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 
 BRAVE_API_BASE = "https://api.search.brave.com"
 BRAVE_SEARCH_API_KEY = os.environ.get("BRAVE_SEARCH_API_KEY", "").strip()
 
-mcp = FastMCP("web-search", transport_security=_security) if _security else FastMCP("web-search")
+mcp = MCPServer("web-search")
 
 
 def _headers() -> dict[str, str]:
     if not BRAVE_SEARCH_API_KEY:
-        raise RuntimeError("BRAVE_SEARCH_API_KEY is not configured")
+        raise ToolError("BRAVE_SEARCH_API_KEY is not configured")
     return {
         "Accept": "application/json",
         "X-Subscription-Token": BRAVE_SEARCH_API_KEY,
@@ -58,8 +52,12 @@ async def _brave_get(path: str, params: dict[str, Any]) -> dict[str, Any]:
     async with httpx.AsyncClient(base_url=BRAVE_API_BASE, headers=_headers(), timeout=45.0) as client:
         response = await client.get(path, params=params)
         if response.status_code == 429:
-            raise RuntimeError("Brave Search API rate limit exceeded")
-        response.raise_for_status()
+            raise ToolError("Brave Search API rate limit exceeded")
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            # mcp 2.x hides non-ToolError messages from the model; keep the status visible.
+            raise ToolError(str(exc)) from exc
         return response.json()
 
 
@@ -226,8 +224,11 @@ async def fetch_url(url: str, max_chars: int = 12000) -> dict[str, Any]:
         follow_redirects=True,
         timeout=30.0,
     ) as client:
-        response = await client.get(url)
-        response.raise_for_status()
+        try:
+            response = await client.get(url)
+            response.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise ToolError(f"Failed to fetch {url}: {exc}") from exc
 
     soup = BeautifulSoup(response.text, "html.parser")
     title = soup.title.get_text(" ", strip=True) if soup.title else ""
